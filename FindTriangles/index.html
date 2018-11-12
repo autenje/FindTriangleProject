@@ -1,0 +1,302 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Find Triangles</title>
+    <style>
+        body {
+            background: #fff;
+            color: #505050;
+            font: 14px 'Segoe UI', tahoma, arial, helvetica, sans-serif;
+            margin: 20px;
+            padding: 0;
+        }
+
+        #header {
+            background: #E9EDEE;
+            padding: 0;
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: normal;
+            color: 	#1F3642;
+            margin: 0;
+            padding: 0 30px;
+            line-height: 150px;
+        }
+
+        p {
+            font-size: 20px;
+            color: #fff;
+            background: #1E5C81;
+            padding: 0 30px;
+            line-height: 50px;
+        }
+
+        #main {
+            padding: 5px 30px;
+        }
+
+        .section {
+            width: 38.7%;
+            float: left;
+            margin: 0 0 0 4%;
+        }
+
+            .section h2 {
+                font-size: 13px;
+                text-transform: uppercase;
+                 color: 	#1F3642;
+                margin: 0;
+                border-bottom: 1px solid silver;
+                padding-bottom: 12px;
+                margin-bottom: 8px;
+            }
+
+
+              .section h3 {
+                font-size: 12px;
+                text-transform: uppercase;
+                margin: 0;
+                 color: 	#1F3642;
+                border-bottom: 1px solid silver;
+                padding-bottom: 12px;
+                margin-bottom: 8px;
+            }
+
+            .section.first {
+                margin-left: 0;
+            }
+
+                .section.first h2 {
+                    font-size: 24px;
+                    text-transform: none;
+                    margin-bottom: 25px;
+                    border: none;
+                }
+
+                .section.first li {
+                    border-top: 1px solid silver;
+                    padding: 8px 0;
+                }
+
+            .section.last {
+                margin-right: 0;
+            }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            line-height: 20px;
+        }
+
+        li {
+            padding: 4px 0;
+        }
+
+        a {
+            color: #267cb2;
+            text-decoration: none;
+        }
+
+            a:hover {
+                text-decoration: underline;
+            }
+
+
+
+   
+
+           .inputfile {
+	                    width: 0.1px;
+	                    height: 0.1px;
+	                    opacity: 0;
+	                    overflow: hidden;
+	                    position: absolute;
+	                    z-index: -1;
+                    }
+
+            .inputfile + label{     font-family: Verdana, Arial, Helvetica, sans-serif; 
+                font-size: 12px; 
+                font-weight: bold; 
+                color: 	#1F3642;
+                border: #EA7475;
+                width: 250px;
+                border-radius: 12px;
+                border-style: solid;
+                border-width: 2px;}
+
+            .inputfile + label:hover{background-color: lightgray}
+
+            .inputfile:focus + label,
+            .inputfile.has-focus + label {
+                outline: 1px dotted #000;
+                outline: -webkit-focus-ring-color auto 5px;
+            }
+
+
+
+.button
+{
+font-family: Verdana, Arial, Helvetica, sans-serif; 
+font-size: 12px; 
+font-weight: bold; 
+border-radius: 12px;
+color: #003366
+}
+
+.button1 {
+font-family: Verdana, Arial, Helvetica, sans-serif; 
+font-size: 12px; 
+font-weight: bold; 
+color: 	#1F3642;
+border: #EA7475;
+border-radius: 12px;
+border-style: solid;
+border-width: 2px;
+}
+
+        .button1:hover:enabled {background-color: lightgray;
+        }
+
+
+    </style>
+</head>
+<body onbeforeunload="setHourGlass();" onunload="setHourGlass();">
+
+    <div id="header">
+        <h1>Find Triangles</h1>
+
+        <p>Upload Image File</p>
+    </div>
+
+    <div id="main">
+        <div class="section first">
+            <h3>Upload Image</h3>
+
+            <input id="file" name="file" type="file" class="inputfile" />
+            <label for="file"><span>Choose a File</span> </label>
+
+            <input id="btnUploadFile" type="button" class="button1" value="Upload File" />
+            <label id="lblFileStatus"></label>
+        </div>
+        <div class="section">
+            <h3>Triangles Found on Uploaded Image:</h3>
+            <input id="process" type="button" value="Process Image" class="button1" disabled onclick="find();" />
+            <ul></ul>
+            <ul id="triangles" />
+        </div>
+
+
+
+
+    </div>
+
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+    <script>
+
+        var uri = 'api/Triangle';
+
+
+
+        function formatItem(item) {
+            return item.Name + ' : Point A (' + item.PtAx + ',' + item.PtAy + ')' + '  Point B (' + item.PtBx + ',' + item.PtBy + ')' + '  Point C (' + item.PtCx + ',' + item.PtCy + ')' + '  Row (' + item.Row + ')' + '  Col (' + item.Col + ')' + '  Area (' + item.Area + ')';
+        }
+
+        function find() {
+            var id = 5;
+            $.getJSON(uri + '/5')
+                .done(function (data) {
+                    $.each(data, function (key, item) {
+                        $('<li>', { text: formatItem(item) }).appendTo($('#triangles'));
+                    });
+
+                });
+        }
+
+        document.body.style.cursor = 'default';
+    </script>
+
+</body>
+
+</html>
+
+<script type="text/javascript">
+
+    function setDefault() {
+        document.body.style.cursor = 'default';
+    }
+    function setHourGlass()
+    {
+        document.body.style.cursor = 'wait';
+    }
+
+    $(document).ready(function () {
+
+        $('#btnUploadFile').on('click', function () {
+
+            var data = new FormData();
+
+            var files = $("#file").get(0).files;
+
+            // Add the uploaded image content to the form data collection
+            if (files.length > 0) {
+                data.append("UploadedImage", files[0]);
+                document.getElementById('lblFileStatus').innerHTML = 'File Uploaded';
+
+                document.getElementById("process").disabled = false;
+            }
+            else {
+                document.getElementById('lblFileStatus').innerHTML = 'No File Found';
+
+                document.getElementById("process").disabled = true;
+            }
+
+            // Make Ajax request with the contentType = false, and procesDate = false
+            $.ajax({
+                type: "POST",
+                url: "/api/file/uploadfile",
+                contentType: false,
+                processData: false,
+                data: data
+            });
+        });
+    });
+
+    'use strict';
+
+    ; (function (document, window, index) {
+        var inputs = document.querySelectorAll('.inputfile');
+       
+        Array.prototype.forEach.call(inputs, function (input) {
+            var label = input.nextElementSibling,
+                labelVal = label.innerHTML;
+
+            input.addEventListener('change', function (e) {
+                var fileName = '';
+                if (this.files && this.files.length > 1)
+                    fileName = (this.getAttribute('data-multiple-caption') || '').replace('{count}', this.files.length);
+                else
+                    fileName = e.target.value.split('\\').pop();
+
+                if (fileName)
+                    label.querySelector('span').innerHTML = fileName;
+                else
+                    label.innerHTML = labelVal;
+            });
+
+            // Firefox bug fix
+            input.addEventListener('focus', function () { input.classList.add('has-focus'); });
+            input.addEventListener('blur', function () { input.classList.remove('has-focus'); });
+        });
+    }(document, window, 0));
+
+
+
+
+
+
+
+</script>
